@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
-import { requireAdmin } from "@/lib/adminController"
-import connectDB from "@/lib/db"
+import { requireAdmin } from "@/controllers/adminController"
+import { connectDB } from "@/lib/mongodb"
 import User from "@/models/User"
 
 export async function DELETE(req, { params }) {
