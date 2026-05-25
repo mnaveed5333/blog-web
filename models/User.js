@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true, minlength: 6 },
     role: { type: String, enum: ["user", "admin"], default: "user" },
     isSubscribed: { type: Boolean, default: false },
+    readHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }], // ✅ add this
   },
   { timestamps: true }
 )

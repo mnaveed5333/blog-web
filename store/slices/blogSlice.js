@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
 export const fetchBlogs = createAsyncThunk("blogs/fetchAll", async (_, { rejectWithValue }) => {
   try {
-    const res = await fetch("/api/blogs")
+    const res = await fetch("/api/blogs", { credentials: "include" })
     const result = await res.json()
     if (!res.ok) return rejectWithValue(result.error)
     return result.blogs
@@ -13,7 +13,7 @@ export const fetchBlogs = createAsyncThunk("blogs/fetchAll", async (_, { rejectW
 
 export const fetchBlogById = createAsyncThunk("blogs/fetchOne", async (id, { rejectWithValue }) => {
   try {
-    const res = await fetch(`/api/blogs/${id}`)
+    const res = await fetch(`/api/blogs/${id}`, { credentials: "include" })  // ✅ sends cookie
     const result = await res.json()
     if (!res.ok) return rejectWithValue(result.error)
     return result.blog
@@ -22,10 +22,9 @@ export const fetchBlogById = createAsyncThunk("blogs/fetchOne", async (id, { rej
   }
 })
 
-// 👇 NEW
 export const fetchMostViewedBlogs = createAsyncThunk("blogs/fetchMostViewed", async (_, { rejectWithValue }) => {
   try {
-    const res = await fetch("/api/blogs?sort=views&limit=3")
+    const res = await fetch("/api/blogs?sort=views&limit=3", { credentials: "include" })
     const result = await res.json()
     if (!res.ok) return rejectWithValue(result.error)
     return result.blogs
@@ -39,7 +38,7 @@ const blogSlice = createSlice({
   initialState: {
     blogs: [],
     currentBlog: null,
-    mostViewed: [],       // 👇 NEW
+    mostViewed: [],
     loading: false,
     error: null,
   },
@@ -74,7 +73,6 @@ const blogSlice = createSlice({
         state.loading = false
         state.error = action.payload
       })
-      // 👇 NEW
       .addCase(fetchMostViewedBlogs.pending, (state) => {
         state.loading = true
         state.error = null
