@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import SubscriptionStatus from "@/components/subscription/SubscriptionStatus"
 import BlogList from "@/components/blog/BlogList"
 
