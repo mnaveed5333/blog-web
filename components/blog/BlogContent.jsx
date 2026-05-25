@@ -323,6 +323,9 @@ export default function BlogContent({ blogId }) {
   const [optimisticPremium, setOptimisticPremium] = useState(false)
 
   const articleRef = useRef(null)
+  useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "instant" })
+}, [blogId])
 
   useEffect(() => {
     if (sessionStorage.getItem("paymentPending") === "true") setOptimisticPremium(true)

@@ -6,25 +6,33 @@ import { useBlogs } from "@/hooks/useBlogs"
 import Image from "next/image"
 import { useEffect } from "react"
 import BlogCard from "@/components/blog/BlogCard"
+import { RiLockLine, RiArrowRightLine, RiStarLine, RiBookOpenLine, RiGroupLine, RiShieldLine } from "react-icons/ri"
 
 function AuthPromptBanner() {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl p-8 text-center shadow-lg mt-10">
-      <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
-      <div className="relative">
-        <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <svg width="24" height="24" fill="none" stroke="white" strokeWidth="2" viewBox="0 0 24 24">
-            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
-          </svg>
+    <div className="rounded-2xl overflow-hidden border border-blue-100 bg-white shadow-sm">
+      <div className="bg-blue-600 px-8 py-6 text-center">
+        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <RiLockLine size={22} className="text-white" />
         </div>
-        <h3 className="text-xl font-bold text-white mb-2">Unlock All Articles</h3>
-        <p className="text-blue-100 text-sm max-w-sm mx-auto mb-6 font-light">
+        <h3 className="text-lg font-semibold text-white">Unlock All Articles</h3>
+        <p className="text-blue-200 text-xs mt-1 max-w-sm mx-auto">
           Sign in or create a free account to browse all articles and premium content.
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/register" className="bg-white text-blue-600 hover:bg-blue-50 px-6 py-2.5 rounded-xl font-semibold text-sm transition-colors">Create free account</Link>
-          <Link href="/login" className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-6 py-2.5 rounded-xl font-semibold text-sm transition-colors">Sign in</Link>
-        </div>
+      </div>
+      <div className="px-8 py-6 bg-blue-50 flex flex-col sm:flex-row gap-3 justify-center">
+        <Link
+          href="/register"
+          className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-semibold text-sm"
+        >
+          Create free account <RiArrowRightLine size={15} />
+        </Link>
+        <Link
+          href="/login"
+          className="inline-flex items-center justify-center gap-2 bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 px-6 py-2.5 rounded-xl font-semibold text-sm"
+        >
+          Sign in
+        </Link>
       </div>
     </div>
   )
@@ -39,55 +47,65 @@ export default function HomePage() {
   }, [user])
 
   return (
-    <main className="bg-slate-100 min-h-screen">
+    <main className="bg-white min-h-screen">
 
       {/* Hero */}
       <section className="relative overflow-hidden -mt-[60px]">
         <Image
-          src="/OIP2.webp"
+          src="/hero.jpg"
           alt="Hero background"
           fill
           className="object-cover object-center"
           priority
         />
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute" />
 
-        <div className="relative max-w-7xl mx-auto px-6 pt-[calc(60px+7rem)] pb-28">
+        <div className="relative max-w-7xl mx-auto px-6 pt-[calc(60px+2rem)] pb-28">
           <div className="max-w-3xl mx-auto text-center">
 
-            <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
+              <RiStarLine size={13} className="text-white" />
               Premium Blogging Platform
             </div>
 
-            <h1 className="text-6xl md:text-7xl font-black text-white leading-tight mb-6">
-              Read Modern<span className="block text-blue-400">Premium Blogs</span>
+            <h1 className="text-6xl md:text-7xl font-black text-white leading-tight mb-5">
+              Read Modern<span className="block text-gray-900">Premium Blogs</span>
             </h1>
 
-            <p className="text-white text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10">
+            <p className="text-white text-lg leading-relaxed max-w-xl mx-auto mb-10">
               Discover high-quality articles, premium insights, and exclusive content from professional writers around the world.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-              <Link href="/register" className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-2xl font-semibold flex items-center gap-2 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-                Get Started
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </Link>
-              <Link href={user ? "/blogs" : "/login"} className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-2xl font-semibold transition-all">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14">
+              {!user && (
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-xl font-semibold text-sm shadow-lg"
+                >
+                  Get Started <RiArrowRightLine size={16} />
+                </Link>
+              )}
+              <Link
+                href={user ? "/blogs" : "/login"}
+                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-3.5 rounded-xl font-semibold text-sm"
+              >
                 {user ? "Browse Blogs" : "Sign in to Browse"}
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-3xl mx-auto">
+            {/* Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
               {[
-                { bg: "bg-blue-100 text-blue-500", label: "500+", sub: "Premium Articles", icon: <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg> },
-                { bg: "bg-cyan-100 text-cyan-500", label: "10K+", sub: "Active Readers", icon: <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> },
-                { bg: "bg-amber-100 text-amber-500", label: "4.9★", sub: "Reader Rating", icon: <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> },
-              ].map(({ bg, label, sub, icon }) => (
-                <div key={sub} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5">
-                  <div className={`w-12 h-12 rounded-xl ${bg} flex items-center justify-center mx-auto mb-3`}>{icon}</div>
-                  <h3 className="text-2xl font-bold text-white">{label}</h3>
-                  <p className="text-white text-sm mt-1">{sub}</p>
+                { label: "500+",  sub: "Premium Articles", icon: RiBookOpenLine },
+                { label: "10K+",  sub: "Active Readers",   icon: RiGroupLine    },
+                { label: "4.9★",  sub: "Reader Rating",    icon: RiStarLine     },
+              ].map(({ label, sub, icon: Icon }) => (
+                <div key={sub} className="bg-white/10 border border-white/15 rounded-2xl px-5 py-4 text-center">
+                  <div className="w-9 h-9 rounded-xl bg-blue-500/40 flex items-center justify-center mx-auto mb-2">
+                    <Icon size={17} className="text-white" />
+                  </div>
+                  <p className="text-2xl font-bold text-white">{label}</p>
+                  <p className="text-blue-200 text-xs mt-0.5">{sub}</p>
                 </div>
               ))}
             </div>
@@ -96,58 +114,87 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Most Viewed Blogs Section */}
+      {/* Most Viewed */}
       <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <p className="text-blue-500 font-semibold mb-2">Most Popular</p>
-            <h2 className="text-4xl font-black text-slate-900">Most Viewed Blogs</h2>
+        <div className="rounded-2xl overflow-hidden border border-blue-100 bg-white shadow-sm mb-8">
+          <div className="bg-blue-600 px-6 py-4 flex items-center justify-between">
+            <div>
+              <h2 className="text-white font-semibold text-sm tracking-wide">Most Viewed Blogs</h2>
+              <p className="text-blue-200 text-xs mt-0.5">Trending articles this week</p>
+            </div>
+            {user && (
+              <Link
+                href="/blogs"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-200 hover:text-white border border-white/20 hover:border-white/40 px-3 py-1.5 rounded-lg"
+              >
+                View All <RiArrowRightLine size={13} />
+              </Link>
+            )}
           </div>
-          {user && (
-            <Link href="/blogs" className="hidden md:flex items-center gap-2 text-blue-500 hover:text-blue-600 font-semibold">
-              View All
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </Link>
-          )}
-        </div>
 
-        {isLoading ? (
-          <div className="flex justify-center py-20">
-            <div className="w-6 h-6 border-2 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
+          <div className="p-6">
+            {isLoading ? (
+              <div className="flex justify-center py-16">
+                <div className="w-6 h-6 border-2 border-blue-100 border-t-blue-500 rounded-full animate-spin" />
+              </div>
+            ) : !user ? (
+              <AuthPromptBanner />
+            ) : mostViewed.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {mostViewed.map(blog => (
+                  <BlogCard key={blog._id} blog={blog} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-3">
+                  <RiBookOpenLine size={18} className="text-blue-300" />
+                </div>
+                <p className="text-slate-400 text-sm">No blogs found</p>
+              </div>
+            )}
           </div>
-        ) : !user ? (
-          <AuthPromptBanner />
-        ) : mostViewed.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {mostViewed.map(blog => (
-              <BlogCard key={blog._id} blog={blog} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-slate-400 text-center py-10">No blogs found</p>
-        )}
+        </div>
       </section>
 
       {/* Pricing */}
-      <section className="bg-white border-t border-slate-200 py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <p className="text-blue-500 font-semibold mb-3">Pricing Plans</p>
-            <h2 className="text-5xl font-black text-slate-900 mb-4">Choose Your Plan</h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto">
-              Start for free and upgrade anytime to unlock premium articles and exclusive member features.
-            </p>
+      <section className="pb-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="rounded-2xl overflow-hidden border border-blue-100 bg-white shadow-sm">
+            <div className="bg-blue-600 px-6 py-5 text-center">
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+                <RiShieldLine size={12} /> Pricing Plans
+              </div>
+              <h2 className="text-2xl font-bold text-white">Choose Your Plan</h2>
+              <p className="text-blue-200 text-sm mt-1 max-w-md mx-auto">
+                Start for free and upgrade anytime to unlock premium articles and exclusive features.
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="grid md:grid-cols-2 gap-5">
+                <PlanCard
+                  name="Free"
+                  price="$0"
+                  features={["Access free blogs", "Limited content", "Basic features"]}
+                  isFree={true}
+                />
+                <PlanCard
+                  name="Premium"
+                  price="$5/mo"
+                  features={["All free blogs", "Unlimited premium content", "Early access", "No ads"]}
+                  isFree={false}
+                />
+              </div>
+              {!isLoading && !user && (
+                <p className="text-center text-slate-400 text-xs mt-6">
+                  Already have an account?{" "}
+                  <Link href="/login" className="text-blue-600 hover:underline font-medium">
+                    Sign in to access your plan
+                  </Link>
+                </p>
+              )}
+            </div>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <PlanCard name="Free" price="$0" features={["Access free blogs", "Limited content", "Basic features"]} isFree={true} />
-            <PlanCard name="Premium" price="$5/mo" features={["All free blogs", "Unlimited premium content", "Early access", "No ads"]} isFree={false} />
-          </div>
-          {!isLoading && !user && (
-            <p className="text-center text-slate-400 text-sm mt-10">
-              Already have an account?{" "}
-              <Link href="/login" className="text-blue-500 hover:underline font-medium">Sign in to access your plan</Link>
-            </p>
-          )}
         </div>
       </section>
 
