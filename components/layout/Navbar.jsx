@@ -1,0 +1,176 @@
+"use client"
+import Link from "next/link"
+import { useState, useRef, useEffect } from "react"
+import { useAuth } from "@/hooks/useAuth"
+import { useSubscription } from "@/hooks/useSubscription"
+import { usePathname } from "next/navigation"
+import { FiBookOpen, FiUser, FiLogOut, FiShield } from "react-icons/fi"
+import { MdDashboard } from "react-icons/md"
+
+export default function Navbar() {
+  const { user, logout, authReady } = useAuth()
+  const { isSubscribed } = useSubscription()
+  const path = usePathname()
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  const isHome = path === "/"   // 👈 detect homepage
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  const avatarLetter = user?.email?.charAt(0).toUpperCase() || "?"
+
+  return (
+    <nav className={`px-6 h-[60px] flex items-center justify-between sticky top-0 z-50 transition-all ${
+      isHome
+        ? "bg-transparent border-b border-white/10"          // 👈 transparent on homepage
+        : "bg-white border-b border-slate-100"               // 👈 white on other pages
+    }`}>
+
+      {/* Logo */}
+      <Link href="/" className="flex items-center gap-2" style={{ textDecoration: "none" }}>
+        <span style={{
+          fontSize: "20px",
+          fontWeight: 900,
+          letterSpacing: "-0.04em",
+          // 👇 white on homepage, gradient elsewhere
+          ...(isHome
+            ? { color: "white" }
+            : {
+                background: "linear-gradient(135deg, #6366f1, #3b82f6)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }
+          )
+        }}>
+          Readify
+        </span>
+      </Link>
+
+      <div className="flex items-center gap-2">
+        {!authReady ? (
+          <div className={`w-24 h-8 rounded-lg animate-pulse ${isHome ? "bg-white/20" : "bg-slate-100"}`} />
+        ) : !user ? (
+          <>
+            <Link
+              href="/login"
+              className="text-sm px-4 py-1.5 rounded-lg border font-medium transition-all"
+              style={{
+                textDecoration: "none",
+                // 👇 ghost style on homepage, normal on others
+                color: isHome ? "white" : "#64748b",
+                borderColor: isHome ? "rgba(255,255,255,0.3)" : "#e2e8f0",
+                background: isHome ? "rgba(255,255,255,0.1)" : "transparent",
+              }}
+            >
+              Log in
+            </Link>
+            <Link href="/register" className="text-sm text-white px-4 py-1.5 rounded-lg font-bold transition-all" style={{
+              background: "linear-gradient(135deg, #6366f1, #3b82f6)",
+              boxShadow: "0 2px 10px rgba(99,102,241,0.4)",
+              textDecoration: "none",
+            }}>
+              Get started free
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/blogs"
+              className={`flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg transition-all ${
+                isHome
+                  ? path === "/blogs" ? "bg-white/20 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
+                  : path === "/blogs" ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+              }`}
+              style={{ textDecoration: "none" }}
+            >
+              <FiBookOpen size={14} /> Blogs
+            </Link>
+            <Link
+              href="/dashboard"
+              className={`flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg transition-all ${
+                isHome
+                  ? path === "/dashboard" ? "bg-white/20 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
+                  : path === "/dashboard" ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+              }`}
+              style={{ textDecoration: "none" }}
+            >
+              <MdDashboard size={14} /> Dashboard
+            </Link>
+
+            <div className={`w-px h-5 mx-1 ${isHome ? "bg-white/20" : "bg-slate-100"}`} />
+
+            {isSubscribed && (
+              <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-1 rounded-full font-medium tracking-wide">PRO</span>
+            )}
+            {user.role === "admin" && (
+              <span className="text-[10px] bg-red-50 text-red-600 px-2 py-1 rounded-full font-medium">Admin</span>
+            )}
+
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setDropdownOpen(prev => !prev)}
+                className="w-8 h-8 rounded-full text-white font-bold text-sm flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-blue-300"
+                title={user.email}
+                style={{
+                  background: "linear-gradient(135deg, #6366f1, #3b82f6)",
+                  boxShadow: "0 2px 8px rgba(99,102,241,0.4)",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {avatarLetter}
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-xl shadow-lg py-1.5 z-50">
+                  <div className="px-3.5 py-3 border-b border-slate-100 flex items-center gap-2.5 mb-1">
+                    <div className="w-8 h-8 rounded-full text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
+                      style={{ background: "linear-gradient(135deg, #6366f1, #3b82f6)" }}
+                    >
+                      {avatarLetter}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-medium text-slate-800 truncate">{user.name}</p>
+                      <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                    </div>
+                  </div>
+
+                  <Link href="/profile" onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-2 px-3.5 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-all"
+                    style={{ textDecoration: "none" }}>
+                    <FiUser size={14} /> Profile
+                  </Link>
+
+                  {user.role === "admin" && (
+                    <Link href="/admin" onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-2 px-3.5 py-2 text-sm text-red-500 hover:bg-red-50 transition-all"
+                      style={{ textDecoration: "none" }}>
+                      <FiShield size={14} /> Admin panel
+                    </Link>
+                  )}
+
+                  <div className="border-t border-slate-100 mt-1 pt-1">
+                    <button onClick={() => { setDropdownOpen(false); logout() }}
+                      className="w-full flex items-center gap-2 px-3.5 py-2 text-sm text-slate-500 hover:bg-slate-50 transition-all text-left"
+                      style={{ background: "none", border: "none", cursor: "pointer" }}>
+                      <FiLogOut size={14} /> Log out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </nav>
+  )
+}
