@@ -3,7 +3,7 @@ import { useState } from "react"
 import { FiX, FiSend } from "react-icons/fi"
 import { RiWhatsappLine, RiMailLine, RiUserLine, RiMessage2Line } from "react-icons/ri"
 
-const WHATSAPP_NUMBER = "923001234567"
+const WHATSAPP_NUMBER = "923151639533"
 
 export default function WhatsAppModal({ onClose }) {
   const [form, setForm] = useState({ name: "", email: "", message: "" })
