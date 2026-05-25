@@ -4,9 +4,8 @@ import { useState, useRef, useEffect } from "react"
 import { useAuth } from "@/hooks/useAuth"
 import { useSubscription } from "@/hooks/useSubscription"
 import { usePathname } from "next/navigation"
-import { FiBookOpen, FiUser, FiLogOut, FiShield } from "react-icons/fi"
-import { MdDashboard } from "react-icons/md"
-import { RiWhatsappLine } from "react-icons/ri"
+import { FiUser, FiLogOut, FiShield, FiFileText, FiHome, FiStar } from "react-icons/fi"
+import { RiWhatsappLine, RiDashboardLine, RiArticleLine, RiAddCircleLine, RiGroupLine, RiBankCardLine } from "react-icons/ri"
 import WhatsAppModal from "@/components/layout/WhatsappModal"
 
 export default function Navbar() {
@@ -31,6 +30,20 @@ export default function Navbar() {
   }, [])
 
   const avatarLetter = user?.email?.charAt(0).toUpperCase() || "?"
+
+  const navLinks = [
+    { href: "/blogs",     label: "All Blogs",  icon: FiFileText },
+    { href: "/dashboard", label: "Dashboard",  icon: FiHome     },
+    { href: "/subscribe", label: "Subscribe",  icon: FiStar     },
+  ]
+
+  const adminLinks = [
+    { href: "/admin",               label: "Dashboard",      icon: RiDashboardLine },
+    { href: "/admin/blogs",         label: "Blogs",          icon: RiArticleLine   },
+    { href: "/admin/blogs/create",  label: "New Blog",       icon: RiAddCircleLine },
+    { href: "/admin/users",         label: "Users",          icon: RiGroupLine     },
+    
+  ]
 
   return (
     <>
@@ -90,29 +103,6 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link
-                href="/blogs"
-                className={`flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg transition-all ${
-                  isHome
-                    ? path === "/blogs" ? "bg-white/20 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
-                    : path === "/blogs" ? "bg-blue-50 text-blue-700" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
-                }`}
-                style={{ textDecoration: "none" }}
-              >
-                <FiBookOpen size={14} /> Blogs
-              </Link>
-              <Link
-                href="/dashboard"
-                className={`flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg transition-all ${
-                  isHome
-                    ? path === "/dashboard" ? "bg-white/20 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
-                    : path === "/dashboard" ? "bg-blue-50 text-blue-700" : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
-                }`}
-                style={{ textDecoration: "none" }}
-              >
-                <MdDashboard size={14} /> Dashboard
-              </Link>
-
               {!isAdmin && (
                 <button
                   onClick={() => setWhatsappOpen(true)}
@@ -159,7 +149,9 @@ export default function Navbar() {
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-xl shadow-xl py-1.5 z-50">
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-xl shadow-xl py-1.5 z-50 max-h-[80vh] overflow-y-auto">
+
+                    {/* User info */}
                     <div className="px-3.5 py-3 border-b border-slate-100 flex items-center gap-2.5 mb-1">
                       <div
                         className="w-8 h-8 rounded-full text-white font-bold text-sm flex items-center justify-center flex-shrink-0"
@@ -173,6 +165,33 @@ export default function Navbar() {
                       </div>
                     </div>
 
+                    {/* Regular nav links — hidden when inside admin */}
+                    {!isAdmin && navLinks.map(({ href, label, icon: Icon }) => {
+                      const active = path === href
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-2 px-3.5 py-2 text-sm transition-all"
+                          style={{
+                            textDecoration: "none",
+                            color: active ? "#2563eb" : "#475569",
+                            background: active ? "#eff6ff" : "transparent",
+                            fontWeight: active ? 600 : 400,
+                          }}
+                          onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#f8fafc" }}
+                          onMouseLeave={e => { if (!active) e.currentTarget.style.background = "transparent" }}
+                        >
+                          <Icon size={14} />
+                          {label}
+                        </Link>
+                      )
+                    })}
+
+                    <div className="border-t border-slate-100 my-1" />
+
+                    {/* Profile */}
                     <Link
                       href="/profile"
                       onClick={() => setDropdownOpen(false)}
@@ -182,17 +201,39 @@ export default function Navbar() {
                       <FiUser size={14} /> Profile
                     </Link>
 
+                    {/* Admin section — only for admin role */}
                     {user.role === "admin" && (
-                      <Link
-                        href="/admin"
-                        onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-2 px-3.5 py-2 text-sm text-red-500 hover:bg-red-50 transition-all"
-                        style={{ textDecoration: "none" }}
-                      >
-                        <FiShield size={14} /> Admin panel
-                      </Link>
+                      <>
+                        <div className="border-t border-slate-100 my-1" />
+                        <p className="px-3.5 pt-1 pb-1 text-[10px] font-semibold uppercase tracking-widest text-red-400">
+                          Admin
+                        </p>
+                        {adminLinks.map(({ href, label, icon: Icon }) => {
+                          const active = path === href
+                          return (
+                            <Link
+                              key={href}
+                              href={href}
+                              onClick={() => setDropdownOpen(false)}
+                              className="flex items-center gap-2 px-3.5 py-2 text-sm transition-all"
+                              style={{
+                                textDecoration: "none",
+                                color: active ? "#dc2626" : "#ef4444",
+                                background: active ? "#fef2f2" : "transparent",
+                                fontWeight: active ? 600 : 400,
+                              }}
+                              onMouseEnter={e => { if (!active) e.currentTarget.style.background = "#fff5f5" }}
+                              onMouseLeave={e => { if (!active) e.currentTarget.style.background = "transparent" }}
+                            >
+                              <Icon size={14} />
+                              {label}
+                            </Link>
+                          )
+                        })}
+                      </>
                     )}
 
+                    {/* Logout */}
                     <div className="border-t border-slate-100 mt-1 pt-1">
                       <button
                         onClick={() => { setDropdownOpen(false); logout() }}
